@@ -1,35 +1,57 @@
 # Apex Feed
 
-An RSS reader with no ranking algorithm. Newest first, and that is the whole idea.
+A small RSS and Atom reader for ApexOS. Entries are cached on the device, so the last fetch stays
+readable with no connection. Vanilla HTML/CSS/JS with relative `./` paths for `/apps/feed/`.
 
-**Status: not built.**
+## Run
 
-## What it should do
+```sh
+python3 -m http.server 8080
+# then open http://127.0.0.1:8080/
+```
 
-- Subscribe to feeds by URL.
-- Show everything, newest first, with no "for you" and no engagement metric.
-- Mark read, star, and search.
+Feeds must be served over http(s) and — for a browser-only app — must allow cross-origin reads. Many
+publishers do not. If adding a feed fails with a network error, open **CORS relay** in the sidebar and
+enter a relay prefix of your own, such as `https://your-relay.example/?url=`; the app appends the
+encoded feed URL to it. Nothing is hard-coded: with the field empty every fetch is direct.
 
-## The constraint that shapes it
+## What it does
 
-Feeds have to be fetched somewhere, and a browser cannot do it for most sites. That means
-a Worker fetches the feed and returns parsed items — well within the free 100,000 requests
-a day if you poll a few dozen feeds an hour rather than every minute.
+- **Add feed** by URL, with `https://` assumed when no scheme is given; duplicates are detected.
+- **Refresh all** fetches each feed in turn, keeps the read flags of entries already seen and counts
+  what is new. A failure is stored per feed and shown under its name, without discarding what is
+  already cached.
+- **Sidebar** lists feeds with unread counts, plus an "All items" row. **Mark all read** and
+  **Unsubscribe** act on the current selection; unsubscribing forgets that feed's cached entries.
+- **Reader** shows the entry's title, feed, date and body text with a link to the original. Opening an
+  entry marks it read.
 
-Two real limits: some sites block unknown fetchers, and fetching on a schedule needs the
-cron that already exists in `Automation`.
+## Parsing
 
-## Why "no algorithm" is the easy part
+`DOMParser` in XML mode handles RSS 2.0, RSS 1.0/RDF (items are siblings of `channel`) and Atom.
+Links follow the shape of each format: Atom's `<link href>` with `rel="alternate"` is preferred, RSS's
+`<link>` text is the fallback. Body text prefers `content:encoded`, then `content`, `description`,
+`summary`, and is stripped to plain text — HTML is never injected into the page.
 
-There is nothing to build: sort by date. The work is in the fetching, the de-duplication of
-items that reappear, and not downloading the same article twice.
+## Storage
 
-## What you need to do
+One `localStorage` key, `apex.feed.v1`, capped at the **400 newest entries** so a long-lived reader
+cannot quietly fill the origin's quota:
 
-1. Nothing new.
+```json
+{
+  "proxy": "",
+  "feeds": [{ "id": "…", "url": "https://example.com/feed.xml", "title": "Example",
+              "added": 1763472000000, "error": "" }],
+  "items": [{ "key": "feedid|guid", "feedId": "…", "title": "…", "link": "https://…",
+              "date": 1763472000000, "text": "Plain text body", "read": false }]
+}
+```
 
-## First three steps
+Item keys are `feedId|guid`, so a feed that changes its guids will re-add entries; one that keeps them
+stable accumulates history instead of duplicating.
 
-1. A Worker route that takes a feed URL and returns JSON items.
-2. A list view with read/unread state in Firestore.
-3. A cron job in `Automation` that refreshes subscribed feeds every hour.
+## Bundling into ApexOS
+
+Roster entry `Apex-Feed feed`. Keep paths relative and bump `CACHE` in `sw.js` (`apex-feed-v1`) when
+shell files change.
