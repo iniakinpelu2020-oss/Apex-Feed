@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Apex Feed</title>
+<meta name="description" content="A small RSS and Atom reader for ApexOS: cached entries stay readable offline.">
+<meta name="theme-color" content="#080a12">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <img src="./icons/icon-192.png" alt="" width="28" height="28">
+    <span>Apex Feed</span>
+  </div>
+  <form id="addForm" class="add" autocomplete="off">
+    <input id="feedUrl" type="text" inputmode="url" placeholder="https://example.com/feed.xml" aria-label="Feed URL">
+    <button class="primary" type="submit">Add feed</button>
+  </form>
+  <button id="refreshAll" type="button">Refresh all</button>
+</header>
+
+<main>
+  <aside class="side card">
+    <h2>Feeds</h2>
+    <ul id="feedList" class="feeds"></ul>
+    <p id="feedsEmpty" class="muted">No feeds yet. Paste a feed URL above.</p>
+    <details class="proxy">
+      <summary>CORS relay</summary>
+      <p class="muted">Many sites refuse cross-origin reads. If a feed will not add, enter a relay of your own that forwards one URL, such as <code>https://your-relay.example/?url=</code>. The app appends the encoded feed URL to it.</p>
+      <input id="proxy" type="text" inputmode="url" placeholder="relay prefix" aria-label="CORS relay prefix">
+    </details>
+  </aside>
+
+  <section class="card pane" id="listPane">
+    <div class="panehead">
+      <h2 id="paneTitle">All items</h2>
+      <div class="paneacts">
+        <button id="markAll" type="button">Mark all read</button>
+        <button id="unsub" type="button">Unsubscribe</button>
+      </div>
+    </div>
+    <ul id="itemList" class="items"></ul>
+    <p id="itemsEmpty" class="muted">Nothing here yet. Add a feed, then press Refresh all.</p>
+  </section>
+
+  <article class="card reader" id="reader" hidden>
+    <div class="panehead">
+      <button id="back" type="button">&larr; Back</button>
+      <span id="readerFeed" class="chip"></span>
+    </div>
+    <h1 id="readerTitle"></h1>
+    <p id="readerMeta" class="muted"></p>
+    <div id="readerBody" class="body"></div>
+    <p class="orig"><a id="readerLink" href="#" target="_blank" rel="noopener noreferrer">Open original</a></p>
+  </article>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+<script src="./app.js"></script>
+</body>
+</html>

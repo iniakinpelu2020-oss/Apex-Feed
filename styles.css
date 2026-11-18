@@ -1,0 +1,77 @@
+:root{
+  --bg:#080a12; --panel:#0e1220; --panel-2:#131828; --line:#232a3d;
+  --ink:#e8ecff; --muted:#8b95b3; --accent:#f59e0b;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink); height:100dvh; display:flex; flex-direction:column;
+  font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+.bar{
+  display:flex; align-items:center; gap:12px; padding:10px 14px; flex-wrap:wrap;
+  background:linear-gradient(180deg,#0d1220,#0a0e18); border-bottom:1px solid var(--line);
+}
+.brand{display:flex; align-items:center; gap:9px; font-weight:650}
+.brand img{border-radius:8px}
+.add{display:flex; gap:8px; flex:1 1 320px; min-width:0}
+.add input{flex:1}
+main{flex:1; min-height:0; overflow:auto; padding:14px; display:grid; grid-template-columns:240px minmax(0,1fr); gap:12px; align-content:start}
+@media (max-width:760px){main{grid-template-columns:1fr}}
+
+input,select,button,a{font:inherit; color:inherit}
+input[type=text],input[type=url]{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:8px 11px; min-width:0}
+input:focus{outline:2px solid var(--accent); outline-offset:1px}
+button{background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:7px 12px; cursor:pointer; white-space:nowrap}
+button:hover{border-color:#39425e}
+button.primary{background:var(--accent); border-color:var(--accent); color:#1a1204; font-weight:650}
+button.primary:hover{filter:brightness(1.06)}
+a{color:var(--accent)}
+
+.card{border:1px solid var(--line); background:var(--panel); border-radius:16px; padding:13px 15px}
+.card h2{margin:0 0 10px; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em}
+.muted{color:var(--muted); font-size:13px}
+
+.side{align-self:start}
+.feeds{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px}
+.feeds button{
+  width:100%; text-align:left; display:flex; align-items:center; gap:8px;
+  background:transparent; border:1px solid transparent; border-radius:10px; padding:7px 9px;
+}
+.feeds button:hover{background:#0b0f1a; border-color:var(--line)}
+.feeds button[aria-current=true]{background:#141b2b; border-color:var(--line)}
+.feeds .nm{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.feeds .ct{font-size:11.5px; color:#1a1204; background:var(--accent); border-radius:999px; padding:0 7px; font-weight:650}
+.feeds .ct.zero{color:var(--muted); background:#1b2136}
+.feeds .err{color:#ff6b81; font-size:11.5px; padding:0 9px 4px}
+.proxy{margin-top:12px; border-top:1px solid var(--line); padding-top:10px}
+.proxy summary{cursor:pointer; font-size:12.5px; color:var(--muted)}
+.proxy p{margin:8px 0; font-size:12px; line-height:1.5}
+.proxy input{width:100%}
+.proxy code{background:#0b0f1a; padding:1px 4px; border-radius:5px; font-size:11.5px}
+
+.panehead{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+.panehead h2{margin:0; color:var(--ink); text-transform:none; letter-spacing:0; font-size:16px; font-weight:650}
+.paneacts{margin-left:auto; display:flex; gap:6px}
+
+.items{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px}
+.items li{border:1px solid var(--line); background:#0b0f1a; border-radius:11px}
+.items button{
+  width:100%; text-align:left; background:transparent; border:0; border-radius:11px;
+  padding:9px 11px; display:flex; gap:10px; align-items:baseline;
+}
+.items button:hover{background:#101728}
+.items .dot{width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto}
+.items .dot.read{background:#2b344d}
+.items .tt{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted)}
+.items li.unread .tt{color:var(--ink); font-weight:600}
+.items .dt{font-size:12px; color:var(--muted); white-space:nowrap}
+.items .fd{font-size:11.5px; color:var(--muted); flex:0 0 auto}
+
+.reader h1{margin:2px 0 6px; font-size:21px; line-height:1.3}
+.reader .chip{font-size:11.5px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 9px}
+.reader .body{margin:14px 0 6px; max-width:70ch; white-space:pre-wrap; overflow-wrap:anywhere}
+.reader .body p{margin:0 0 11px}
+.orig{margin:16px 0 2px; padding-top:12px; border-top:1px solid var(--line)}
+.toast{position:fixed; left:50%; bottom:18px; transform:translateX(-50%); background:#1b2136; border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13px; box-shadow:0 8px 24px #0008; max-width:90vw}
+[hidden]{display:none!important}
