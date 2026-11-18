@@ -1,6 +1,6 @@
 'use strict';
 
-var CACHE = 'apex-fee-v1';
+var CACHE = 'apex-feed-v1';
 var SHELL = [
   './',
   './index.html',
